@@ -3,11 +3,10 @@
 
 #define MAX_LENGTH 10
 
-//NOTE FOR FUTURE ME: CONSIDER USING A NAMESPACE FOR GLOBAL HISTORY VARIABLE(S)
-
 int main(){
 	
 	bool loop = true;
+	unsigned short choice;
 	std::string inputString;
 
 	//START
@@ -21,21 +20,42 @@ int main(){
 		//CLEAR INPUT BUFFER
 		if ( ! readInput( inputString, MAX_LENGTH ) ){ //If readInput returns false, no length error
 
-			//CHECK FOR "EXIT" (ANY CASE) -> BREAK
+			//CHECK FOR "EXIT" (ANY CASE)
+			//CHECK FOR "HISTORY" (ANY CASE) 
+			choice = option( inputString );
 
-			//CHECK FOR "HISTORY" (ANY CASE) -> PRINT LAST 5 EXPRESSIONS AND RESULTS -> LOOP TO START
+			switch( choice ){
 
-			//PARSE EXPRESSION FROM STRING
-
-			//CHECK VALIDITY OF INPUT STRING EXPRESSION
-
-			//FORMAT STRING FOR SIMPLE PARSING
-
-			//EVALUATE EXPRESSION
+				case 1: //Expression entered by user
 	
-			//OUTPUT RESULT
+					//PARSE EXPRESSION FROM STRING
 
-			//STORE EXPRESSION AND RESULT IN HISTORY
+					//CHECK VALIDITY OF INPUT STRING EXPRESSION
+
+					//FORMAT STRING FOR SIMPLE PARSING
+
+					//EVALUATE EXPRESSION
+	
+					//OUTPUT RESULT
+
+					//STORE EXPRESSION AND RESULT IN HISTORY
+
+					break;
+
+				case 2: //"HISTORY" entered by user
+
+					//PRINT LAST 5 EXPRESSIONS AND RESULTS
+
+					//LOOP TO START
+					break;
+
+				case 3: //"EXIT" entered by user
+
+					//BREAK
+					loop = false;
+					break;
+
+			}
 
 		}
 

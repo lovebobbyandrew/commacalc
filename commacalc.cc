@@ -1,5 +1,7 @@
+//#include <cctype>
 #include <iostream>
 #include <string>
+//#include <cstring>
 #include <fstream>
 #include <ios>
 #include <limits>
@@ -38,6 +40,41 @@ bool readInput( std::string& inputString, int maxLength ){
 void clearStdin( void ){
 
 	std::cin.clear();
-	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	std::cin.ignore( std::numeric_limits< std::streamsize >::max(), '\n' );
 
-}		
+}
+
+unsigned short option( std::string inputString ){
+
+	unsigned short choice;
+	std::hash< std::string > hasher;
+
+	for( int i = 0; i < inputString.length(); ++i ){
+
+		inputString[ i ] = std::toupper( inputString[ i ] );
+
+	}
+
+	const int inputHash = hasher( inputString );
+
+	switch( inputHash ){
+
+		case 2055804650: //Found via hasher( "EXIT" )
+
+			choice = 3; //EXIT entered by user
+			break;
+
+		case -102179798: //Found via hasher( "HISTORY" )
+
+			choice = 2; //HISTORY entered by user
+			break;
+
+		default:
+
+			choice = 1;
+
+	}
+
+	return choice;
+
+}
