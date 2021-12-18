@@ -2,11 +2,11 @@
 
 void printMenu( void ); //Prints options
 
-std::string readString( void ); //Reads from stdin
+bool readInput( std::string&, int ); //Reads from stdin and checks length
 
 void clearStdin( void ); //Clears input buffer
 
-bool checkLength( std::string ); //Checks validity of string length
+//bool checkLength( std::string ); //Checks validity of string length //GETLINE FAILBIT HANDLES THIS, SO UNNECESSARY FUNC
 
 int choice( std::string ); //Checks for keywords "HISTORY" and "EXIT"
 
