@@ -1,31 +1,34 @@
 #include <string>
 
-void printMenu( void ); //Prints options
+namespace commacalc {
 
-bool readInput( std::string&, int ); //Reads from stdin and checks length
+void printMenu(void); //Prints options
 
-void clearStdin( void ); //Clears input buffer
+bool readInput(std::string&, int); //Reads from stdin and checks length
 
-unsigned short option( std::string ); //Checks for keywords "HISTORY" and "EXIT"
+void clearStdin(void); //Clears input buffer
 
-void printHistory( void ); //Prints last 5 expressions and results
+unsigned short option(std::string); //Checks for keywords "HISTORY" and "EXIT"
 
-std::string removeSpace( std::string ); //Removes whitespace
+void printHistory(void); //Prints last 5 expressions and results
 
-bool checkExpression( std::string ); //Checks that string is valid math expression
+std::string removeSpace(std::string); //Removes whitespace
 
-std::string formatExpression( std::string ); //Formats input string
+bool checkExpression(std::string); //Checks that string is valid math expression
 
-double calculate( std::string ); //Calls primitive math functions
+std::string formatExpression(std::string); //Formats input string
 
-void storeExpression( std::string, double ); //Stores expression and result
+double calculate(std::string); //Calls primitive math functions
 
-double exponentiation( double, double ); //Performs exponentiation
+void storeExpression(std::string, double); //Stores expression and result
 
-double multiplication( double, double ); //Performs multiplication
+double exponentiation(double, double); //Performs exponentiation
 
-double division( double, double ); //Performs division
+double multiplication(double, double); //Performs multiplication
 
-double addition( double, double ); //Performs addition
+double division(double, double); //Performs division
 
-double subtraction( double, double ); //Performs subtraction
+double addition(double, double); //Performs addition
+
+double subtraction(double, double); //Performs subtraction
+} //End of namespace commacalc.
