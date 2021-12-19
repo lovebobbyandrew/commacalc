@@ -1,34 +1,38 @@
+// Bobby Love
+// December 17, 2021
+// GNU GPL
+
 #include <string>
 
 namespace commacalc {
 
-void printMenu(void); //Prints options
+void PrintMenu(void); //Prints options
 
-bool readInput(std::string&, int); //Reads from stdin and checks length
+bool ReadInput(std::string&, int); //Reads from stdin and checks length
 
-void clearStdin(void); //Clears input buffer
+void ClearStdin(void); //Clears input buffer
 
-unsigned short option(std::string); //Checks for keywords "HISTORY" and "EXIT"
+unsigned short Option(std::string); //Checks for keywords "HISTORY" and "EXIT"
 
-void printHistory(void); //Prints last 5 expressions and results
+void PrintHist(void); //Prints last 5 expressions and results
 
-std::string removeSpace(std::string); //Removes whitespace
+std::string RemoveSpace(std::string); //Removes whitespace
 
-bool checkExpression(std::string); //Checks that string is valid math expression
+bool CheckExpr(std::string); //Checks that string is valid math expression
 
-std::string formatExpression(std::string); //Formats input string
+std::string FormatExpr(std::string); //Formats input string
 
-double calculate(std::string); //Calls primitive math functions
+double Calc(std::string); //Calls primitive math functions
 
-void storeExpression(std::string, double); //Stores expression and result
+void StoreExpr(std::string, double); //Stores expression and result
 
-double exponentiation(double, double); //Performs exponentiation
+double Expo(double, double); //Performs exponentiation
 
-double multiplication(double, double); //Performs multiplication
+double Mult(double, double); //Performs multiplication
 
-double division(double, double); //Performs division
+double Div(double, double); //Performs division
 
-double addition(double, double); //Performs addition
+double Add(double, double); //Performs addition
 
-double subtraction(double, double); //Performs subtraction
+double Sub(double, double); //Performs subtraction
 } //End of namespace commacalc.

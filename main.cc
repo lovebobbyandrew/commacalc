@@ -1,25 +1,29 @@
+// Bobby Love
+// December 17, 2021
+// GNU GPL
+
 #include "commacalc.h"
 #include <iostream>
 
 #define MAX_LENGTH 10
 
-int main(){
+int main() {
 	bool loop = true;
-	std::string inputString;
-	do{
-		commacalc::printMenu();
+	std::string input_string;
+	do {
+		commacalc::PrintMenu();
 		//READ INPUT STRING
 		//CHECK VALIDITY OF INPUT STRING LENGTH
 		//CLEAR INPUT BUFFER
-		if (! commacalc::readInput(inputString, MAX_LENGTH)){ //If readInput returns false, there is no length error.			
+		if (!commacalc::ReadInput(input_string, MAX_LENGTH)) { //If readInput returns false, there is no length error.			
 			//CHECK FOR "EXIT" (ANY CASE)
 			//CHECK FOR "HISTORY" (ANY CASE) 
-			switch(commacalc::option(inputString)){
+			switch (commacalc::Option(input_string)) {
 				case 1: //Expression entered by user.
 					//FORMAT STRING FOR SIMPLE PARSING
-					inputString = commacalc::removeSpace(inputString);
+					input_string = commacalc::RemoveSpace(input_string);
 					//CHECK VALIDITY OF INPUT STRING EXPRESSION
-					if(! commacalc::checkExpression(inputString)){
+					if(!commacalc::CheckExpr(input_string)) {
 						//EVALUATE EXPRESSION
 						//OUTPUT RESULT
 						//STORE EXPRESSION AND RESULT IN HISTORY
@@ -34,6 +38,6 @@ int main(){
 					break;
 			}
 		}
-	}while(loop);
+	}while (loop);
 	return 0;
 }

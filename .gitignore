@@ -1,5 +1,2 @@
-#Exclude executable
-commacalc
-
-#Exclude object files
 *.o
+commacalc

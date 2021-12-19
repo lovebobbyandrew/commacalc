@@ -1,3 +1,7 @@
+# Bobby Love
+# December 17, 2021
+# GNU GPL
+
 PROGRAM := commacalc
 
 SOURCES := $(wildcard *.cc)
@@ -9,8 +13,8 @@ CXXFLAGS := -std=c++11
 $(PROGRAM): $(OBJS)
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
-main.o: main.cc commacalc.h
-commacalc.o: commacalc.cc commacalc.h
+main.o: main.cc commacalc.h common.h
+commacalc.o: commacalc.cc commacalc.h common.h
 
 .PHONY: clean
 clean:
