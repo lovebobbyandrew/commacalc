@@ -6,7 +6,6 @@
 int main(){
 	
 	bool loop = true;
-	unsigned short choice;
 	std::string inputString;
 
 	//START
@@ -19,26 +18,27 @@ int main(){
 		//CHECK VALIDITY OF INPUT STRING LENGTH
 		//CLEAR INPUT BUFFER
 		if ( ! readInput( inputString, MAX_LENGTH ) ){ //If readInput returns false, no length error
-
+						
 			//CHECK FOR "EXIT" (ANY CASE)
 			//CHECK FOR "HISTORY" (ANY CASE) 
-			choice = option( inputString );
-
-			switch( choice ){
+			switch( option( inputString ) ){
 
 				case 1: //Expression entered by user
-	
-					//PARSE EXPRESSION FROM STRING
-
-					//CHECK VALIDITY OF INPUT STRING EXPRESSION
 
 					//FORMAT STRING FOR SIMPLE PARSING
+					inputString = removeSpace( inputString );
 
-					//EVALUATE EXPRESSION
+
+					//CHECK VALIDITY OF INPUT STRING EXPRESSION
+					if( ! checkExpression( inputString ) ){
+
+						//EVALUATE EXPRESSION
 	
-					//OUTPUT RESULT
+						//OUTPUT RESULT
 
-					//STORE EXPRESSION AND RESULT IN HISTORY
+						//STORE EXPRESSION AND RESULT IN HISTORY
+
+					}
 
 					break;
 

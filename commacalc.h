@@ -10,6 +10,8 @@ unsigned short option( std::string ); //Checks for keywords "HISTORY" and "EXIT"
 
 void printHistory( void ); //Prints last 5 expressions and results
 
+std::string removeSpace( std::string ); //Removes whitespace
+
 bool checkExpression( std::string ); //Checks that string is valid math expression
 
 std::string formatExpression( std::string ); //Formats input string

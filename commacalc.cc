@@ -1,9 +1,12 @@
 //#include <cctype>
 #include <iostream>
 #include <string>
+#include <cmath>
 //#include <cstring>
 #include <fstream>
 #include <ios>
+#include <algorithm>
+#include <cctype>
 #include <limits>
 #include "commacalc.h"
 
@@ -25,6 +28,7 @@ bool readInput( std::string& inputString, int maxLength ){
 		error = true;
 		std::cout << "Expression too long." << std::endl;
 		clearStdin(); //Clear input buffer
+
 	}
 
 	else{ //No length error
@@ -35,7 +39,7 @@ bool readInput( std::string& inputString, int maxLength ){
 
 	return error;
 
-}
+} //ask user if they want truncated string instead?
 
 void clearStdin( void ){
 
@@ -47,7 +51,6 @@ void clearStdin( void ){
 unsigned short option( std::string inputString ){
 
 	unsigned short choice;
-	std::hash< std::string > hasher;
 
 	for( int i = 0; i < inputString.length(); ++i ){
 
@@ -55,26 +58,194 @@ unsigned short option( std::string inputString ){
 
 	}
 
-	const int inputHash = hasher( inputString );
+	if( "EXIT" == inputString ){
 
-	switch( inputHash ){
+		choice = 3;
 
-		case 2055804650: //Found via hasher( "EXIT" )
+	} else 
 
-			choice = 3; //EXIT entered by user
-			break;
+	if( "HISTORY" == inputString ){
 
-		case -102179798: //Found via hasher( "HISTORY" )
+		choice = 2;
 
-			choice = 2; //HISTORY entered by user
-			break;
+	} else choice = 1;
 
-		default:
+	return choice;
 
-			choice = 1;
+}
+
+void printHistory( void ){
+
+	//Print last 5 expression and results
+
+}
+
+std::string removeSpace( std::string inputString ){
+
+	inputString.erase( std::remove_if( inputString.begin(), inputString.end(),
+		 isspace ), inputString.end() );
+	return inputString;
+}
+
+bool checkExpression( std::string inputString ){
+
+	bool error = false;
+	unsigned short leftParen = 0;
+	unsigned short rightParen = 0;
+
+	if( 0 == inputString.length() ){ //Empty string
+
+		error = true;
 
 	}
 
-	return choice;
+	if( ! isdigit( inputString[ 0 ] ) && 1 == inputString.length() ){ //!digit and length 1
+
+		error = true;
+
+		std::cout << "length 1 non digit err" << std::endl; //testing remove when done
+
+	}
+
+	for( int i = 0; i < inputString.length(); ++i ){
+
+		if( ! isdigit( inputString[ i ] ) && //If !digit, operator, or newline
+			inputString[ i ] != '(' && inputString[ i ] != ')' &&
+			inputString[ i ] != '^' && inputString[ i ] != '*' &&
+			inputString[ i ] != '/' && inputString[ i ] != '+' &&
+			inputString[ i ] != '-' && inputString[ i ] != '\n' ){
+
+			error = true;
+
+			std::cout << "not digit, operator, or nl err" << std::endl; //testing purposes remove
+
+		}
+
+		if( i + 1 < inputString.length() ){ //Prevent out of bounds index
+
+			if( inputString[ i ] == inputString [ i + 1 ] && //If double occurrence of operator
+				( inputString[ i ] == '^' || inputString[ i ] == '*' ||
+				inputString[ i ] == '/' || inputString[ i ] == '+' ||
+				inputString[ i ] == '-' ) ){
+
+				error = true;
+
+				std::cout << "i is: " << i << " string[ i ] is: " << inputString[i] << " string[i + 1] is: " << inputString[ i + 1] << std::endl;
+				std::cout << "double occur error" << std::endl; //testing purposes remove this line and the one above too when done
+
+			}
+
+		}
+
+	}
+
+	for( int i = 0; i < inputString.length(); ++i ){ //Check for closing parenthesis
+
+		if( '(' == inputString[ i ] ){
+
+			++leftParen; //Count # of left parenthesis
+			error = true; //Assume no closing parenthesis
+
+			for( int j = i + 1; j < inputString.length(); ++j ){
+
+				if( ')' == inputString[ j ] ){ //If closing parenthesis found
+
+					inputString[ j ] = '~'; //Placeholder to prevent a ')' from being counted repeatedly
+					error = false;
+					break;
+
+				}
+
+			}
+
+		}
+
+	} //iterate through once, save parenthesis indexes, make sure each left parenthesis has a matching right with a greater index
+
+	for( int i = 0; i < inputString.length(); ++i ){ //Replace all '~' with ')'
+
+		if( '~' == inputString[ i ] ){
+
+			inputString[ i ] = ')';
+
+		}
+
+		if( ')' == inputString[ i ] ){ //Count # of right parenthesis
+
+			++rightParen;
+
+		}
+
+	}
+
+	if( leftParen != rightParen ){ //Compare # of left parenthesis and right
+
+		error = true;
+
+	}
+
+
+	if( true == error ){
+
+		std::cout << "Expression invalid." << std::endl;
+
+	}
+
+	return error;
+
+}
+
+std::string formatExpression( std::string inputString){
+
+	//Formats good input string
+
+
+	return inputString;
+
+}
+
+double calculate( std::string ){
+
+	//calcuates expression and returns result
+	double result;
+
+
+	return result;
+
+}
+
+void storeExpression( std::string, double ){
+
+	//stores expression and result into history array
+
+}
+
+double exponentiation( double base, double exponent ){
+
+	return( pow( base, exponent ) );
+
+}
+
+double multiplication( double multiplicand, double multiplier ){
+
+	return( multiplicand * multiplier );
+
+}
+
+double division( double dividend, double divisor ){
+
+	return( dividend / divisor );
+
+}
+
+double addition( double addend, double augend ){
+
+	return( addend + augend );
+
+}
+
+double subtraction( double minuend, double subtrahend ){
+
+	return( minuend - subtrahend );
 
 }
