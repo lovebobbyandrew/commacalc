@@ -6,33 +6,45 @@
 
 namespace commacalc {
 
-void PrintMenu(void); //Prints options
+void PrintMenu(void); // Prints menu options.
 
-bool ReadInput(std::string&, int); //Reads from stdin and checks length
+bool ReadInput(std::string&, int); // Reads from stdin and checks length.
 
-void ClearStdin(void); //Clears input buffer
+void ClearStdin(void); // Clears input buffer.
 
-unsigned short Option(std::string); //Checks for keywords "HISTORY" and "EXIT"
+unsigned short Option(std::string); // Checks for keywords "HISTORY" and "EXIT".
 
-void PrintHist(void); //Prints last 5 expressions and results
+void PrintHist(void); // Prints last 5 expressions and results.
 
-std::string RemoveSpace(std::string); //Removes whitespace
+std::string RemoveSpace(std::string); // Removes whitespace from input string.
 
-bool CheckExpr(std::string); //Checks that string is valid math expression
+bool CheckExpr(std::string); // Checks that string is valid math expression using other functions.
 
-std::string FormatExpr(std::string); //Formats input string
+bool CheckChar(std::string); // Checks that string contains no invalid characters.
 
-double Calc(std::string); //Calls primitive math functions
+bool CheckDoubleOp(std::string); // Checks that string contains no double occurrences of operators.
 
-void StoreExpr(std::string, double); //Stores expression and result
+bool CheckParen(std::string); // Checks that string has matching parenthesis pairs.
 
-double Expo(double, double); //Performs exponentiation
+bool CheckParenOp(std::string); // Checks whether invalid operators are adjacent to a parenthesis.
 
-double Mult(double, double); //Performs multiplication
+bool CheckEmpty(std::string); // Checks whether string is empty.
 
-double Div(double, double); //Performs division
+bool CheckStartEnd(std::string); // Checks whether a string begins or ends with an invalid operator.
 
-double Add(double, double); //Performs addition
+bool CheckSingle(std::string); // Checks whether a single character string is a digit.
 
-double Sub(double, double); //Performs subtraction
-} //End of namespace commacalc.
+double Calc(std::string); // Calls primitive math functions.
+
+void StoreExpr(std::string, double); // Stores expression and result in history variable.
+
+double Expo(double, double); // Performs exponentiation.
+
+double Mult(double, double); // Performs multiplication.
+
+double Div(double, double); // Performs division.
+
+double Add(double, double); // Performs addition.
+
+double Sub(double, double); // Performs subtraction.
+} // End of namespace commacalc.

@@ -5,7 +5,7 @@
 #include "commacalc.h"
 #include <iostream>
 
-#define MAX_LENGTH 10
+#define MAX_LENGTH 50
 
 int main() {
 	bool loop = true;
@@ -24,6 +24,7 @@ int main() {
 					input_string = commacalc::RemoveSpace(input_string);
 					//CHECK VALIDITY OF INPUT STRING EXPRESSION
 					if(!commacalc::CheckExpr(input_string)) {
+						std::cout << "Valid expression." << std::endl;
 						//EVALUATE EXPRESSION
 						//OUTPUT RESULT
 						//STORE EXPRESSION AND RESULT IN HISTORY
