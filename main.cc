@@ -23,10 +23,11 @@ int main() {
 					//FORMAT STRING FOR SIMPLE PARSING
 					input_string = commacalc::ReplaceSpace(input_string);
 					input_string = commacalc::RemoveSpace(input_string);
-					std::cout << "String is \"" << input_string << "\"" << std::endl;
+					std::cout << "String is \"" << input_string << "\"." << std::endl;
 					//CHECK VALIDITY OF INPUT STRING EXPRESSION
 					if(!commacalc::CheckExpr(input_string)) {
 						std::cout << "Valid expression." << std::endl;
+						//PARSE VALUES AND OPERATIONS FROM STRING
 						//EVALUATE EXPRESSION
 						//OUTPUT RESULT
 						//STORE EXPRESSION AND RESULT IN HISTORY

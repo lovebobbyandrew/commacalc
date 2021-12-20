@@ -24,7 +24,9 @@ bool CheckExpr(std::string); // Checks that string is valid math expression usin
 
 bool CheckChar(std::string); // Checks that string contains no invalid characters.
 
-bool CheckDoubleOp(std::string); // Checks that string contains no double occurrences of operators.
+bool CheckOperator(std::string); // Checks contents of indexes adjacent to an operator.
+
+bool CheckDoubleOp(std::string); // Checks that string contains no double occurrences of operators other than '-'.
 
 bool CheckParen(std::string); // Checks that string has matching parenthesis pairs.
 

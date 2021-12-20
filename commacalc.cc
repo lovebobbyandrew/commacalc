@@ -110,18 +110,21 @@ bool CheckChar(std::string input_string) {
 bool CheckOperator(std::string input_string) {
 	bool error = false;
 	for (int i = 0; i < input_string.length(); ++i) {
-		if (0 < i && input_string.length() - 1 > i) { // Checks if numbers or proper parenthesises surround both sides of a given operator.
-			if ((input_string[i] == '^' || input_string[i] == '*' ||
-					input_string[i] == '/' || input_string[i] == '+') &&
-					(!isdigit(input_string[i - 1]) && ')' != input_string[i - 1]) &&
-					(!isdigit(input_string[i + 1]) && '(' != input_string[i + 1])) {
+		if (0 < i) {
+			if (('^' == input_string[i] || '*' == input_string[i] ||
+					'/' == input_string[i] || '+' == input_string[i] ||
+					'-' == input_string[i]) && ('^' == input_string[i - 1] ||
+					'*' == input_string[i - 1] || '/' == input_string[i - 1] ||
+					'+' == input_string[i - 1] || '-' == input_string[i - 1])) {
 				error = true;
-				break;
-			}
+				if ('-' == input_string[i]) {
+					error = false;
+				} else break;
+			}	
 		}
 		if (i < input_string.length() - 1) { // Prevents out of bounds index for final iteration.
 			if ('-' == input_string[i] && (!isdigit(input_string[i + 1]) && // Checks if '-' operator is followed by a '(' or number.
-					'(' != input_string[i + 1])) {
+					'(' != input_string[i + 1] && '-' != input_string[i + 1])) {
 				error = true;
 				break;
 			}
@@ -136,8 +139,7 @@ bool CheckDoubleOp(std::string input_string) {
 		if (i + 1 < input_string.length()) { // Prevents out of bounds index for final iteration.
 			if ( input_string[i] == input_string [i + 1] && // If double occurrence of operator exists.
 				( input_string[i] == '^' || input_string[i] == '*' ||
-				input_string[i] == '/' || input_string[i] == '+' ||
-				input_string[i] == '-')) {
+				input_string[i] == '/' || input_string[i] == '+')) {
 				error = true;
 				break;
 			}
@@ -162,7 +164,7 @@ bool CheckParen(std::string input_string) {
 				}
 			}
 		}
-	} // CONSIDER: iterate through once, save parenthesis indexes, make sure each left parenthesis has a matching right with a greater index
+	}
 	for (int i = 0; i < input_string.length(); ++i) { // Replace all placeholder '~' with ')'.
 		if ('~' == input_string[i]) {
 			input_string[i] = ')';
@@ -227,25 +229,25 @@ bool CheckExpr(std::string input_string) {
 	bool error = false;
 	bool loop = true;
 	while (loop) {
-std::cout << "made it to empty" << std::endl;
+std::cout << "Made it to CheckEmpty." << std::endl;
 		error = CheckEmpty(input_string);
 		if (error == true) break;
-std::cout << "made it to char" << std::endl;
+std::cout << "Made it to CheckChar." << std::endl;
 		error = CheckChar(input_string);
 		if (error == true) break;
-std::cout << "made it to op" << std::endl;
+std::cout << "Made it to CheckOperator." << std::endl;
 		error = CheckOperator(input_string);
 		if (error == true) break;
-std::cout << "made it to doubleop" << std::endl;
+std::cout << "Made it to CheckDoubleOp." << std::endl;
 		error = CheckDoubleOp(input_string);
 		if (error == true) break;
-std::cout << "made it to paren" << std::endl;
+std::cout << "Made it to CheckParen." << std::endl;
 		error = CheckParen(input_string);
 		if (error == true) break;
-std::cout << "made it to insideparen" << std::endl;
+std::cout << "Made it to CheckInsideParen." << std::endl;
 		error = CheckInsideParen(input_string);
 		if (error == true) break;
-std::cout << "made it to startend" << std::endl;
+std::cout << "Made it to CheckStartEnd." << std::endl;
 		error = CheckStartEnd(input_string);
 		loop = false;
 	}
