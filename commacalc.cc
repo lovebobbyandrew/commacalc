@@ -31,15 +31,15 @@ bool ReadInput(std::string& input_string, int maxLength) {
 		input_string = input_array;
 	}
 	return error;
-} // SHOULD I ASK THE USER IF THEY WOULD LIKE TO CONTINUE WITH A TRUNCATED STRING AS OPPOSED TO FORCING THEM TO TRY AGAIN?
+}
 
 void ClearStdin(void) {
 	std::cin.clear();
 	std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
 }
 
-unsigned short Option(std::string input_string) {
-	unsigned short choice;
+int Option(std::string input_string) {
+	int choice;
 	for (int i = 0; i < input_string.length(); ++i) {
 		input_string[i] = std::toupper( input_string[i]);
 	}
@@ -58,6 +58,29 @@ void PrintHist(void){
 std::string RemoveSpace(std::string input_string) {
 	input_string.erase(std::remove_if(input_string.begin(), input_string.end(),
 		 								isspace), input_string.end());
+	return input_string;
+}
+
+std::string ReplaceSpace(std::string input_string) {
+	for (int i = 0; i < input_string.length(); ++i) {
+		if (isdigit(input_string[i])) {
+			if (i + 1 < input_string.length()) {
+				if (isspace(input_string[i + 1])) {
+					if (i + 1 == input_string.length() - 1) {
+						break;
+					}
+					for (int j = i + 1; j < input_string.length(); ++j) {
+						if (!isspace(input_string[j])) {
+							break;
+						} else if (isdigit(input_string[j + 1])) {
+							input_string[j] = '*';
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
 	return input_string;
 }
 
@@ -93,7 +116,6 @@ bool CheckOperator(std::string input_string) {
 					(!isdigit(input_string[i - 1]) && ')' != input_string[i - 1]) &&
 					(!isdigit(input_string[i + 1]) && '(' != input_string[i + 1])) {
 				error = true;
-				std::cout << "third if" << "i is " << input_string[i] << " bfore is " << input_string[i-1] << " after is " << input_string[i+1] << std::endl;
 				break;
 			}
 		}
@@ -101,7 +123,6 @@ bool CheckOperator(std::string input_string) {
 			if ('-' == input_string[i] && (!isdigit(input_string[i + 1]) && // Checks if '-' operator is followed by a '(' or number.
 					'(' != input_string[i + 1])) {
 				error = true;
-				std::cout << "fourth if";
 				break;
 			}
 		}
@@ -127,15 +148,15 @@ bool CheckDoubleOp(std::string input_string) {
 
 bool CheckParen(std::string input_string) {
 	bool error = false;
-	unsigned short left_paren = 0;
-	unsigned short right_paren = 0;
-	for (int i = 0; i < input_string.length(); ++i) { // Check for closing parenthesis.
+	int left_paren = 0;
+	int right_paren = 0;
+	for (int i = 0; i < input_string.length(); ++i) {
 		if ('(' == input_string[i]) {
 			++left_paren; // Count the number of left parenthesises.
 			error = true; // Assume there is no closing (right) parenthesis.
 			for (int j = i + 1; j < input_string.length(); ++j) {
-				if (')' == input_string[j]) { // If a closing (right) parenthesis is found.
-					input_string[j] = '~'; // Placeholder to prevent a single ')' occurrence from being counted in future iterations.
+				if (')' == input_string[j]) {
+					input_string[j] = '~'; // Placeholder to prevent a single ')' occurrence from being counted in future iterations of loop.
 					error = false;
 					break;
 				}
@@ -156,8 +177,28 @@ bool CheckParen(std::string input_string) {
 	return error;
 }
 
-bool CheckParenOp(std::string input_string) {
-	return false;
+bool CheckInsideParen(std::string input_string) {
+	bool error = false;
+	for (int i = 0; i < input_string.length(); ++i) {
+		if (i < input_string.length() - 1) { // Prevents out of bounds indexing.
+			if ('(' == input_string[i] && ('^' == input_string[i + 1] || // Checks that left parenthesises do not have invalid internally adjacent operator.
+					'*' == input_string[i + 1] || '/' == input_string[i + 1] ||
+					'+' == input_string[i + 1] || ')' == input_string[i + 1])) {
+				error = true;
+				break;
+			}
+		}
+		if (0 < i) { // Prevents out of bounds indexing
+			if (')' == input_string[i] && ('^' == input_string[i - 1] || // Checks that right parenthesises do not have invalid internally adjacent operator.
+					'*' == input_string[i - 1] || '/' == input_string[i - 1] ||
+					'+' == input_string[i - 1] || '-' == input_string[i - 1] ||
+					'(' == input_string[i - 1])) {
+				error = true;
+				break;
+			}
+		}
+	}
+	return error;
 }
 
 bool CheckStartEnd(std::string input_string) {
@@ -167,7 +208,6 @@ bool CheckStartEnd(std::string input_string) {
 				'/' == input_string[0] || '+' == input_string[0] ||
 				')' == input_string[0]) {
 			error = true;
-			std::cout << "first if";
 			break;
 		}
 		if ('^' == input_string[input_string.length() - 1] || // Checks if invalid operator is present at end of string.
@@ -177,7 +217,6 @@ bool CheckStartEnd(std::string input_string) {
 				'-' == input_string[input_string.length() - 1] ||
 				'(' == input_string[input_string.length() - 1]) {
 			error = true;
-			std::cout << "second if";
 			break;
 		}
 	}
@@ -203,8 +242,8 @@ std::cout << "made it to doubleop" << std::endl;
 std::cout << "made it to paren" << std::endl;
 		error = CheckParen(input_string);
 		if (error == true) break;
-std::cout << "made it to parenop" << std::endl;
-		//error = CheckParenOp(input_string);
+std::cout << "made it to insideparen" << std::endl;
+		error = CheckInsideParen(input_string);
 		if (error == true) break;
 std::cout << "made it to startend" << std::endl;
 		error = CheckStartEnd(input_string);
@@ -212,67 +251,6 @@ std::cout << "made it to startend" << std::endl;
 	}
 	return error;
 }
-/*bool CheckExpr(std::string input_string) {
-	bool error = false;
-	unsigned short left_paren = 0;
-	unsigned short right_paren = 0;
-	if (0 == input_string.length()) { // If the user's input string is empty.
-		error = true;
-	}
-	if (!isdigit(input_string[0]) && 1 == input_string.length()) { // If length of the string is 1 and the 1 character is not a number.
-		error = true;
-		std::cout << "length 1 non digit err" << std::endl; // testing remove when done
-	}
-	for (int i = 0; i < input_string.length(); ++i) {
-		if (!isdigit( input_string[i]) && // If !digit, !operator, and !newline, invalid character is present.
-			input_string[i] != '(' && input_string[i] != ')' &&
-			input_string[i] != '^' && input_string[i] != '*' &&
-			input_string[i] != '/' && input_string[i] != '+' &&
-			input_string[i] != '-' && input_string[i] != '\n') {
-			error = true;
-			std::cout << "not digit, operator, or nl err" << std::endl; // testing purposes remove when done
-		}
-		if (i + 1 < input_string.length()) { // Condition prevents out of bounds index for final iteration.
-			if ( input_string[i] == input_string [i + 1] && // If double occurrence of operator exists.
-				( input_string[i] == '^' || input_string[i] == '*' ||
-				input_string[i] == '/' || input_string[i] == '+' ||
-				input_string[i] == '-')) {
-				error = true;
-				std::cout << "i is: " << i << " string[i] is: " << input_string[i] << " string[i + 1] is: " << input_string[i + 1] << std::endl; // test remove when done
-				std::cout << "double occur error" << std::endl; // testing purposes remove this line and the one above too when done
-			}
-		}
-	}
-	for (int i = 0; i < input_string.length(); ++i) { // Check for closing parenthesis.
-		if ('(' == input_string[i]) {
-			++left_paren; // Count the number of left parenthesises.
-			error = true; // Assume there is no closing (right) parenthesis.
-			for (int j = i + 1; j < input_string.length(); ++j) {
-				if (')' == input_string[j]) { // If a closing (right) parenthesis is found.
-					input_string[j] = '~'; // Placeholder to prevent a single ')' occurrence from being counted in future iterations.
-					error = false;
-					break;
-				}
-			}
-		}
-	} // CONSIDER: iterate through once, save parenthesis indexes, make sure each left parenthesis has a matching right with a greater index
-
-	for (int i = 0; i < input_string.length(); ++i) { // Replace all placeholder '~' with ')'.
-		if ('~' == input_string[i]) {
-			input_string[i] = ')';
-		}
-		if (')' == input_string[i]) { // Count the number of right parenthesises.
-			++right_paren;
-		}
-	}
-	if (left_paren != right_paren) { // Compare the number of left parenthesises and right parenthesises.
-		error = true;
-	}
-	if (true == error) {
-		std::cout << "Expression invalid." << std::endl;
-	}
-	return error;
-}*/
 
 double Calc(std::string) {
 	//calcuates expression and returns result

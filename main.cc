@@ -3,7 +3,7 @@
 // GNU GPL
 
 #include "commacalc.h"
-#include <iostream>
+#include <iostream> //REMOVE ONCE FINISHED DEBUGGING
 
 #define MAX_LENGTH 50
 
@@ -21,7 +21,9 @@ int main() {
 			switch (commacalc::Option(input_string)) {
 				case 1: //Expression entered by user.
 					//FORMAT STRING FOR SIMPLE PARSING
+					input_string = commacalc::ReplaceSpace(input_string);
 					input_string = commacalc::RemoveSpace(input_string);
+					std::cout << "String is \"" << input_string << "\"" << std::endl;
 					//CHECK VALIDITY OF INPUT STRING EXPRESSION
 					if(!commacalc::CheckExpr(input_string)) {
 						std::cout << "Valid expression." << std::endl;
@@ -29,9 +31,11 @@ int main() {
 						//OUTPUT RESULT
 						//STORE EXPRESSION AND RESULT IN HISTORY
 					}
+					else std::cout << "Invalid expression." << std::endl;
 					break;
 				case 2: //"HISTORY" entered by user
 					//PRINT LAST 5 EXPRESSIONS AND RESULTS
+					std::cout << "HISTORY coming soon!" << std::endl;
 					//LOOP TO START
 					break;
 				case 3: //"EXIT" entered by user
