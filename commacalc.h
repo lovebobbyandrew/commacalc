@@ -20,9 +20,13 @@ std::string ReplaceSpace(std::string input_string); // Replaces whitespace betwe
 
 std::string RemoveSpace(std::string); // Removes whitespace from input string.
 
+std::string DecimalMult(std::string); // Inserts a '*' when 2 numbers are separated by 2 '.'.
+
 bool CheckExpr(std::string); // Checks that string is valid math expression using other functions.
 
 bool CheckChar(std::string); // Checks that string contains no invalid characters.
+
+bool CheckDecimal(std::string); // Checks whether decimals used correctly.
 
 bool CheckOperator(std::string); // Checks contents of indexes adjacent to an operator.
 

@@ -24,6 +24,8 @@ int main() {
 					input_string = commacalc::ReplaceSpace(input_string);
 					input_string = commacalc::RemoveSpace(input_string);
 					std::cout << "String is \"" << input_string << "\"." << std::endl;
+					input_string = commacalc::DecimalMult(input_string);
+					std::cout << "String is \"" << input_string << "\"." << std::endl;
 					//CHECK VALIDITY OF INPUT STRING EXPRESSION
 					if(!commacalc::CheckExpr(input_string)) {
 						std::cout << "Valid expression." << std::endl;

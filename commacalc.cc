@@ -84,6 +84,52 @@ std::string ReplaceSpace(std::string input_string) {
 	return input_string;
 }
 
+std::string DecimalMult(std::string input_string) {
+	for (int i = 0; i < input_string.length(); ++i) {
+		if ('.' == input_string[i]) {
+			if (i - 1 >= 0 && i + 2 < input_string.length()) {
+				if ('.' == input_string[i + 1] && isdigit(input_string[i - 1]) && isdigit(input_string[i + 2])) {
+					input_string.insert(i + 1, 1, '*');
+				}
+			}
+		}
+	}
+	return input_string;
+}
+
+bool CheckDecimal(std::string input_string){
+	bool error = false;
+	for (int i = 0; i < input_string.length(); ++i) {
+		if (1 == input_string.length() && '.' == input_string[0]) { // Checks if string is a lone '.'.
+			error = true;
+			break;
+		}
+		if (i + 1 < input_string.length()) { // Checks if there are 2 or more decimal points in a row.
+			if ('.' == input_string[i] && '.' == input_string[i + 1]) {
+				std::cout << "first if" << std::endl;
+				error = true;
+				break;
+			}
+		}
+		if ('.' == input_string[i]) {
+			for (int j = i + 1; j < input_string.length(); ++j) {
+				if ('(' == input_string[j] || ')' == input_string[j] ||
+						'^' == input_string[j] || '*' == input_string[j] ||
+						'/' == input_string[j] || '+' == input_string[j] ||
+						'-' == input_string[j]) {
+					break;
+				} else if ('.' == input_string[j]) {
+					std::cout << "i is " << input_string[i] << " and j is " << input_string[j] << std::endl;
+					std::cout << "second if" << std::endl;
+					error = true;
+					break;
+				}
+			}
+		}
+	}
+	return error;
+}
+
 bool CheckEmpty(std::string input_string) {
 	bool error = true;
 	if (0 != input_string.length()) { // If the user's input string is not empty.
@@ -99,7 +145,8 @@ bool CheckChar(std::string input_string) {
 				input_string[i] != '(' && input_string[i] != ')' &&
 				input_string[i] != '^' && input_string[i] != '*' &&
 				input_string[i] != '/' && input_string[i] != '+' &&
-				input_string[i] != '-' && input_string[i] != '\n') {
+				input_string[i] != '-' && input_string[i] != '.' &&
+				input_string[i] != '\n') {
 			error = true;
 			break;
 		}
@@ -234,6 +281,9 @@ std::cout << "Made it to CheckEmpty." << std::endl;
 		if (error == true) break;
 std::cout << "Made it to CheckChar." << std::endl;
 		error = CheckChar(input_string);
+		if (error == true) break;
+std::cout << "Made it to CheckDecimal." << std::endl;
+		error = CheckDecimal(input_string);
 		if (error == true) break;
 std::cout << "Made it to CheckOperator." << std::endl;
 		error = CheckOperator(input_string);
