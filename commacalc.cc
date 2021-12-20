@@ -72,7 +72,7 @@ std::string ReplaceSpace(std::string input_string) {
 					for (int j = i + 1; j < input_string.length(); ++j) {
 						if (!isspace(input_string[j])) {
 							break;
-						} else if (isdigit(input_string[j + 1])) {
+						} else if (isdigit(input_string[j + 1]) || '.' == input_string[j + 1]) {
 							input_string[j] = '*';
 							break;
 						}
@@ -104,9 +104,15 @@ bool CheckDecimal(std::string input_string){
 			error = true;
 			break;
 		}
+		if (i - 1 > 0 && i + 1 < input_string.length()) { // Checks if both adjacent indexes to '.' are operators.
+			if (!isdigit(input_string[i - 1]) && '.' == input_string[i] &&
+					!isdigit(input_string[i + 1])) {
+				error = true;
+				break;
+			}
+		}
 		if (i + 1 < input_string.length()) { // Checks if there are 2 or more decimal points in a row.
 			if ('.' == input_string[i] && '.' == input_string[i + 1]) {
-				std::cout << "first if" << std::endl;
 				error = true;
 				break;
 			}
@@ -118,9 +124,7 @@ bool CheckDecimal(std::string input_string){
 						'/' == input_string[j] || '+' == input_string[j] ||
 						'-' == input_string[j]) {
 					break;
-				} else if ('.' == input_string[j]) {
-					std::cout << "i is " << input_string[i] << " and j is " << input_string[j] << std::endl;
-					std::cout << "second if" << std::endl;
+				} else if ('.' == input_string[j]) { // Checks if there are 2 '.' in a row (only valid if formatting function called prior).
 					error = true;
 					break;
 				}
@@ -170,8 +174,9 @@ bool CheckOperator(std::string input_string) {
 			}	
 		}
 		if (i < input_string.length() - 1) { // Prevents out of bounds index for final iteration.
-			if ('-' == input_string[i] && (!isdigit(input_string[i + 1]) && // Checks if '-' operator is followed by a '(' or number.
-					'(' != input_string[i + 1] && '-' != input_string[i + 1])) {
+			if ('-' == input_string[i] && (!isdigit(input_string[i + 1]) && // Checks if '-' operator is followed by a '(', '.', or number.
+					'(' != input_string[i + 1] && '-' != input_string[i + 1]) &&
+					'.' != input_string[i + 1]) {
 				error = true;
 				break;
 			}

@@ -55,4 +55,7 @@ double Div(double, double); // Performs division.
 double Add(double, double); // Performs addition.
 
 double Sub(double, double); // Performs subtraction.
+
+//CONSIDER ADDING SUPPORT FOR FACTORIALS
+
 } // End of namespace "commacalc".
