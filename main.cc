@@ -10,10 +10,8 @@
 int main() {
 	bool loop = true;
 	double result;
-	std::string input_string; // User input string.
-	std::string expression_string; // Formatted version of input_string used for parsing.
-	std::string equation_string; // Combination of expression_string and to_string(result).
-	std::deque<std::string> history_deque; //Holds up to 5 previous equation_string values.
+	std::string input_string;
+	std::deque<std::string> history_deque;
 	do {
 		commacalc::PrintMenu();
 		//READ INPUT STRING
@@ -25,28 +23,28 @@ int main() {
 			switch (commacalc::Option(input_string)) {
 				case 1: //Expression entered by user.
 					//FORMAT STRING FOR SIMPLE PARSING
-					expression_string = commacalc::ReplaceSpace(input_string);
-					expression_string = commacalc::RemoveSpace(expression_string);
-					expression_string = commacalc::DecimalMult(expression_string);
-					std::cout << "input_string is \"" << input_string << "\"." << std::endl;
-					std::cout << "expression_string is \"" << expression_string << "\"." << std::endl;
+					std::cout << "input_string before modification is \"" << input_string << "\"." << std::endl;
+					commacalc::ReplaceSpace(input_string);
+					commacalc::RemoveSpace(input_string);
+					commacalc::DecimalSeparated(input_string);
+					std::cout << "input_string after modification is \"" << input_string << "\"." << std::endl;
 					//CHECK VALIDITY OF INPUT STRING EXPRESSION
-					if(!commacalc::CheckExpression(expression_string)) { // If CheckExpr returns false, there is no expression error.
+					if(!commacalc::CheckExpression(input_string)) { // If CheckExpr returns false, there is no expression error.
 						std::cout << "Valid expression." << std::endl;
 						//PARSE VALUES AND OPERATIONS FROM STRING
 						//EVALUATE EXPRESSION
 						//OUTPUT RESULT
-						result = commacalc::Calculate(expression_string);
+						result = commacalc::Calculate(input_string);
 						//STORE EXPRESSION AND RESULT IN HISTORY
-						equation_string = commacalc::MakeEquation(expression_string, result);
-						std::cout << "equation_string is \"" << equation_string << "\"." << std::endl;
-						history_deque = commacalc::StoreEquation(history_deque, equation_string);
+						commacalc::MakeEquation(input_string, result);
+						std::cout << "equation_string is \"" << input_string << "\"." << std::endl;
+						commacalc::StoreEquation(history_deque, input_string);
 					}
 					else std::cout << "Invalid expression." << std::endl;
 					break;
 				case 2: //"HISTORY" entered by user.
 					//PRINT LAST 5 EXPRESSIONS AND RESULTS
-					commacalc::PrintHistory(history_deque);
+					commacalc::PrintHistory(const_cast<const std::deque<std::string>&>(history_deque));
 					//LOOP TO START
 					break;
 				case 3: //"EXIT" entered by user.

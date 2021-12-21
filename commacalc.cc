@@ -52,20 +52,18 @@ int Option(const std::string input_string) {
 	return choice;
 }
 
-void PrintHistory(const std::deque<std::string> history_deque) {
+void PrintHistory(const std::deque<std::string>& history_deque) {
   for (int i = 0; i < history_deque.size(); ++i) {
     std::cout << history_deque.at(i) << std::endl;
   }
 }
 
-
-std::string RemoveSpace(std::string input_string) {
+void RemoveSpace(std::string& input_string) {
 	input_string.erase(std::remove_if(input_string.begin(), input_string.end(),
-		 								isspace), input_string.end());
-	return input_string;
+		 									isspace), input_string.end());
 }
 
-std::string ReplaceSpace(std::string input_string) {
+void ReplaceSpace(std::string& input_string) {
 	for (int i = 0; i < input_string.length(); ++i) {
 		if (isdigit(input_string[i])) {
 			if (i + 1 < input_string.length()) {
@@ -85,23 +83,22 @@ std::string ReplaceSpace(std::string input_string) {
 			}
 		}
 	}
-	return input_string;
 }
 
-std::string DecimalMult(std::string input_string) {
+void DecimalSeparated(std::string& input_string) {
 	for (int i = 0; i < input_string.length(); ++i) {
 		if ('.' == input_string[i]) {
 			if (i - 1 >= 0 && i + 2 < input_string.length()) {
-				if ('.' == input_string[i + 1] && isdigit(input_string[i - 1]) && isdigit(input_string[i + 2])) {
+				if ('.' == input_string[i + 1] && isdigit(input_string[i - 1]) &&
+						isdigit(input_string[i + 2])) {
 					input_string.insert(i + 1, 1, '*');
 				}
 			}
 		}
 	}
-	return input_string;
 }
 
-bool CheckDecimal(std::string input_string){
+bool CheckDecimal(const std::string& input_string){
 	bool error = false;
 	for (int i = 0; i < input_string.length(); ++i) {
 		if (1 == input_string.length() && '.' == input_string[0]) { // Checks if string is a lone '.'.
@@ -138,7 +135,7 @@ bool CheckDecimal(std::string input_string){
 	return error;
 }
 
-bool CheckEmpty(std::string input_string) {
+bool CheckEmpty(const std::string& input_string) {
 	bool error = true;
 	if (0 != input_string.length()) { // If the user's input string is not empty.
 		error = false;
@@ -146,7 +143,7 @@ bool CheckEmpty(std::string input_string) {
 	return error;
 }
 
-bool CheckChar(std::string input_string) {
+bool CheckChar(const std::string& input_string) {
 	bool error = false;
 	for (int i = 0; i < input_string.length(); ++i) {
 		if (!isdigit( input_string[i]) && // If an index is !digit, !operator, and !newline, then an invalid character is present.
@@ -162,7 +159,7 @@ bool CheckChar(std::string input_string) {
 	return error;
 }
 
-bool CheckOperator(std::string input_string) {
+bool CheckOperator(const std::string& input_string) {
 	bool error = false;
 	for (int i = 0; i < input_string.length(); ++i) {
 		if (0 < i) {
@@ -189,7 +186,7 @@ bool CheckOperator(std::string input_string) {
 	return error;
 }
 
-bool CheckDoubleOp(std::string input_string) {
+bool CheckDoubleOp(const std::string& input_string) {
 	bool error = false;
 	for (int i = 0; i < input_string.length(); ++i) {
 		if (i + 1 < input_string.length()) { // Prevents out of bounds index for final iteration.
@@ -209,28 +206,29 @@ bool CheckDoubleOp(std::string input_string) {
 	return error;
 }
 
-bool CheckParen(std::string input_string) {
+bool CheckParen(const std::string& input_string) {
 	bool error = false;
+	std::string local_copy = input_string;
 	int left_paren = 0;
 	int right_paren = 0;
-	for (int i = 0; i < input_string.length(); ++i) {
-		if ('(' == input_string[i]) {
+	for (int i = 0; i < local_copy.length(); ++i) {
+		if ('(' == local_copy[i]) {
 			++left_paren; // Count the number of left parenthesises.
 			error = true; // Assume there is no closing (right) parenthesis.
-			for (int j = i + 1; j < input_string.length(); ++j) {
-				if (')' == input_string[j]) {
-					input_string[j] = '~'; // Placeholder to prevent a single ')' occurrence from being counted in future iterations of loop.
+			for (int j = i + 1; j < local_copy.length(); ++j) {
+				if (')' == local_copy[j]) {
+					local_copy[j] = '~'; // Placeholder to prevent a single ')' occurrence from being counted in future iterations of loop.
 					error = false;
 					break;
 				}
 			}
 		}
 	}
-	for (int i = 0; i < input_string.length(); ++i) { // Replace all placeholder '~' with ')'.
-		if ('~' == input_string[i]) {
-			input_string[i] = ')';
+	for (int i = 0; i < local_copy.length(); ++i) { // Replace all placeholder '~' with ')'.
+		if ('~' == local_copy[i]) {
+			local_copy[i] = ')';
 		}
-		if (')' == input_string[i]) { // Count the number of right parenthesises.
+		if (')' == local_copy[i]) { // Count the number of right parenthesises.
 			++right_paren;
 		}
 	}
@@ -240,7 +238,7 @@ bool CheckParen(std::string input_string) {
 	return error;
 }
 
-bool CheckInsideParen(std::string input_string) {
+bool CheckInsideParen(const std::string& input_string) {
 	bool error = false;
 	for (int i = 0; i < input_string.length(); ++i) {
 		if (i < input_string.length() - 1) { // Prevents out of bounds indexing.
@@ -251,7 +249,7 @@ bool CheckInsideParen(std::string input_string) {
 				break;
 			}
 		}
-		if (0 < i) { // Prevents out of bounds indexing
+		if (0 < i) { // Prevents out of bounds indexing.
 			if (')' == input_string[i] && ('^' == input_string[i - 1] || // Checks that right parenthesises do not have invalid internally adjacent operator.
 					'*' == input_string[i - 1] || '/' == input_string[i - 1] ||
 					'+' == input_string[i - 1] || '-' == input_string[i - 1] ||
@@ -264,7 +262,7 @@ bool CheckInsideParen(std::string input_string) {
 	return error;
 }
 
-bool CheckStartEnd(std::string input_string) {
+bool CheckStartEnd(const std::string& input_string) {
 	bool error = false;
 	for (int i = 0; i < input_string.length(); ++i) {
 				if ('^' == input_string[0] || '*' == input_string[0] || // Checks if invalid operator is present at start of string.
@@ -286,11 +284,11 @@ bool CheckStartEnd(std::string input_string) {
 	return error;
 }
 
-bool CheckExpression(std::string input_string) {
+bool CheckExpression(const std::string& input_string) {
 	bool error = false;
 	bool loop = true;
 	while (loop) {
-std::cout << "Made it to CheckEmpty." << std::endl;
+std::cout << "Made it to CheckEmpty." << std::endl; // REMOVE ALL COUT STATEMENTS UPON FINISHING ERROR CHECKING FUNCTIONS.
 		error = CheckEmpty(input_string);
 		if (error == true) break;
 std::cout << "Made it to CheckChar." << std::endl;
@@ -318,18 +316,20 @@ std::cout << "Made it to CheckStartEnd." << std::endl;
 	return error;
 }
 
-double Calculate(std::string) {
+double Calculate(const std::string&) {
 	//calcuates expression and returns result
 	double result;
 	return result;
 }
 
-std::string MakeEquation(std::string input_string, double result) {
-	int new_length = input_string.length();
+void MakeEquation(std::string& input_string, const double& result) {
 	std::string result_string = std::to_string(result);
 	for (int i = result_string.length() - 1; i > 0; --i) { // Removes trailing zeroes after decimal point inside string.
 		if ('0' == result_string[i]) {
 			result_string.erase(i, i);
+		} else if ('.' == result_string[i]) {
+			result_string.erase(i, i);
+			break;
 		} else break;
 	}
 	for (int i = 0; i < input_string.length(); ++i) { // Inserts " " before and after specified operators.
@@ -341,37 +341,37 @@ std::string MakeEquation(std::string input_string, double result) {
 			i = i + 1;
 		}
 	}
-	return (input_string + " = " + result_string);
+	input_string = input_string + " = " + result_string;
 }
 
-std::deque<std::string> StoreEquation(std::deque<std::string> history_deque, std::string equation) {
+void StoreEquation(std::deque<std::string>& history_deque, const std::string& equation) {
 	if (history_deque.size() < 5) {
  		history_deque.push_front(equation);
 	} else { // Prevents deque from growing greater than 5 indexes large.
 		history_deque.pop_back();
 		history_deque.push_front(equation);
 	}
-	return history_deque;
 }
 
+//FACTORIAL SUPPORT?
 
-double Exponentiation(double base, double exponent) {
+double Exponentiation(const double base, const double exponent) {
 	return (pow(base, exponent));
 }
 
-double Multiplication(double multiplicand, double multiplier) {
+double Multiplication(const double multiplicand, const double multiplier) {
 	return (multiplicand * multiplier);
 }
 
-double Division(double dividend, double divisor) {
+double Division(const double dividend, const double divisor) {
 	return (dividend / divisor);
 }
 
-double Addition(double addend, double augend) {
+double Addition(const double addend, const double augend) {
 	return (addend + augend);
 }
 
-double Subtraction(double minuend, double subtrahend) {
+double Subtraction(const double minuend, const double subtrahend) {
 	return (minuend - subtrahend);
 }
 } //End of namespace commacalc.
