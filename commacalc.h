@@ -3,26 +3,27 @@
 // GNU GPL
 
 #include <string>
+#include <deque>
 
 namespace commacalc {
 
 void PrintMenu(void); // Prints menu options.
 
-bool ReadInput(std::string&, int); // Reads from stdin and checks length.
+bool ReadInput(std::string&, const int); // Reads from stdin and checks length.
 
 void ClearStdin(void); // Clears input buffer.
 
-int Option(std::string); // Checks for keywords "HISTORY" and "EXIT".
+int Option(const std::string); // Checks for keywords "HISTORY" and "EXIT".
 
-void PrintHist(void); // Prints last 5 expressions and results.
+void PrintHistory(const std::deque<std::string>); // Prints last 5 expressions and results.
 
-std::string ReplaceSpace(std::string input_string); // Replaces whitespace between numbers with a single '*' (same as TI-89).
+std::string ReplaceSpace(std::string); // Replaces whitespace between numbers with a single '*' (same as TI-89).
 
-std::string RemoveSpace(std::string); // Removes whitespace from input string.
+std::string RemoveSpace(std::string); // Removes all whitespace from input string.
 
 std::string DecimalMult(std::string); // Inserts a '*' when 2 numbers are separated by 2 '.'.
 
-bool CheckExpr(std::string); // Checks that string is valid math expression using other functions.
+bool CheckExpression(std::string); // Checks that string is valid math expression using other functions.
 
 bool CheckChar(std::string); // Checks that string contains no invalid characters.
 
@@ -42,19 +43,21 @@ bool CheckStartEnd(std::string); // Checks whether a string begins or ends with 
 
 bool CheckOperator(std::string); // Checks whether an operator has numbers on both sides.
 
-double Calc(std::string); // Calls primitive math functions.
+double Calculate(std::string); // Calls primitive math functions.
 
-void StoreExpr(std::string, double); // Stores expression and result in history variable.
+std::string MakeEquation(std::string, double); // Uses whitespace-less expression and result to output an equation string.
 
-double Expo(double, double); // Performs exponentiation.
+std::deque<std::string> StoreEquation(std::deque<std::string>, std::string); // Stores equation string into history dequeue.
 
-double Mult(double, double); // Performs multiplication.
+double Exponentiaion(double, double); // Performs exponentiation.
 
-double Div(double, double); // Performs division.
+double Multplication(double, double); // Performs multiplication.
 
-double Add(double, double); // Performs addition.
+double Division(double, double); // Performs division.
 
-double Sub(double, double); // Performs subtraction.
+double Addition(double, double); // Performs addition.
+
+double Subtraction(double, double); // Performs subtraction.
 
 //CONSIDER ADDING SUPPORT FOR FACTORIALS
 

@@ -20,7 +20,7 @@ void PrintMenu(void) {
 	std::cout << "Enter \"EXIT\" to exit program." << std::endl;
 }
 
-bool ReadInput(std::string& input_string, int maxLength) {
+bool ReadInput(std::string& input_string, const int maxLength) {
 	bool error = false;
 	char input_array[maxLength];
 	if (std::cin.getline(input_array, maxLength).fail()) { // If failbit is true, then the user's input string is too long.
@@ -35,25 +35,29 @@ bool ReadInput(std::string& input_string, int maxLength) {
 
 void ClearStdin(void) {
 	std::cin.clear();
-	std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
-int Option(std::string input_string) {
+int Option(const std::string input_string) {
 	int choice;
-	for (int i = 0; i < input_string.length(); ++i) {
-		input_string[i] = std::toupper( input_string[i]);
+	std::string input_copy = input_string;
+	for (int i = 0; i < input_copy.length(); ++i) {
+		input_copy[i] = std::toupper(input_copy[i]);
 	}
-	if ("EXIT" == input_string) {
+	if ("EXIT" == input_copy) {
 		choice = 3;
-	} else if ("HISTORY" == input_string) {
+	} else if ("HISTORY" == input_copy) {
 			choice = 2;
 	} else choice = 1;
 	return choice;
 }
 
-void PrintHist(void){
-	// Print the previous 5 expression and results.
+void PrintHistory(const std::deque<std::string> history_deque) {
+  for (int i = 0; i < history_deque.size(); ++i) {
+    std::cout << history_deque.at(i) << std::endl;
+  }
 }
+
 
 std::string RemoveSpace(std::string input_string) {
 	input_string.erase(std::remove_if(input_string.begin(), input_string.end(),
@@ -282,7 +286,7 @@ bool CheckStartEnd(std::string input_string) {
 	return error;
 }
 
-bool CheckExpr(std::string input_string) {
+bool CheckExpression(std::string input_string) {
 	bool error = false;
 	bool loop = true;
 	while (loop) {
@@ -314,33 +318,60 @@ std::cout << "Made it to CheckStartEnd." << std::endl;
 	return error;
 }
 
-double Calc(std::string) {
+double Calculate(std::string) {
 	//calcuates expression and returns result
 	double result;
 	return result;
 }
 
-void StoreExpr(std::string, double) {
-	//stores expression and result into history array
+std::string MakeEquation(std::string input_string, double result) {
+	int new_length = input_string.length();
+	std::string result_string = std::to_string(result);
+	for (int i = result_string.length() - 1; i > 0; --i) { // Removes trailing zeroes after decimal point inside string.
+		if ('0' == result_string[i]) {
+			result_string.erase(i, i);
+		} else break;
+	}
+	for (int i = 0; i < input_string.length(); ++i) { // Inserts " " before and after specified operators.
+		if('*' == input_string[i] || '/' == input_string[i] ||
+ 				'+' == input_string[i] || '-' == input_string[i]) {
+			input_string.insert(i, " ");
+			i = i + 1;
+			input_string.insert(i + 1, " ");
+			i = i + 1;
+		}
+	}
+	return (input_string + " = " + result_string);
 }
 
-double Expo(double base, double exponent) {
-	return(pow(base, exponent));
+std::deque<std::string> StoreEquation(std::deque<std::string> history_deque, std::string equation) {
+	if (history_deque.size() < 5) {
+ 		history_deque.push_front(equation);
+	} else { // Prevents deque from growing greater than 5 indexes large.
+		history_deque.pop_back();
+		history_deque.push_front(equation);
+	}
+	return history_deque;
 }
 
-double Mult(double multiplicand, double multiplier) {
-	return(multiplicand * multiplier);
+
+double Exponentiation(double base, double exponent) {
+	return (pow(base, exponent));
 }
 
-double Div(double dividend, double divisor) {
-	return(dividend / divisor);
+double Multiplication(double multiplicand, double multiplier) {
+	return (multiplicand * multiplier);
 }
 
-double Add(double addend, double augend) {
-	return(addend + augend);
+double Division(double dividend, double divisor) {
+	return (dividend / divisor);
 }
 
-double Sub(double minuend, double subtrahend) {
-	return(minuend - subtrahend);
+double Addition(double addend, double augend) {
+	return (addend + augend);
+}
+
+double Subtraction(double minuend, double subtrahend) {
+	return (minuend - subtrahend);
 }
 } //End of namespace commacalc.
