@@ -60,5 +60,4 @@ double Addition(const double, const double); // Performs addition.
 double Subtraction(const double, const double); // Performs subtraction.
 
 //CONSIDER ADDING SUPPORT FOR FACTORIALS
-
 } // End of namespace "commacalc".

@@ -41,7 +41,7 @@ void ClearStdin(void) {
 int Option(const std::string input_string) {
 	int choice;
 	std::string input_copy = input_string;
-	for (int i = 0; i < input_copy.length(); ++i) {
+	for (long unsigned int i = 0; i < input_copy.length(); ++i) {
 		input_copy[i] = std::toupper(input_copy[i]);
 	}
 	if ("EXIT" == input_copy) {
@@ -53,7 +53,7 @@ int Option(const std::string input_string) {
 }
 
 void PrintHistory(const std::deque<std::string>& history_deque) {
-  for (int i = 0; i < history_deque.size(); ++i) {
+  for (long unsigned int i = 0; i < history_deque.size(); ++i) {
     std::cout << history_deque.at(i) << std::endl;
   }
 }
@@ -64,14 +64,14 @@ void RemoveSpace(std::string& input_string) {
 }
 
 void ReplaceSpace(std::string& input_string) {
-	for (int i = 0; i < input_string.length(); ++i) {
+	for (long unsigned int i = 0; i < input_string.length(); ++i) {
 		if (isdigit(input_string[i])) {
 			if (i + 1 < input_string.length()) {
 				if (isspace(input_string[i + 1])) {
 					if (i + 1 == input_string.length() - 1) {
 						break;
 					}
-					for (int j = i + 1; j < input_string.length(); ++j) {
+					for (long unsigned int j = i + 1; j < input_string.length(); ++j) {
 						if (!isspace(input_string[j])) {
 							break;
 						} else if (isdigit(input_string[j + 1]) || '.' == input_string[j + 1]) {
@@ -86,7 +86,7 @@ void ReplaceSpace(std::string& input_string) {
 }
 
 void DecimalSeparated(std::string& input_string) {
-	for (int i = 0; i < input_string.length(); ++i) {
+	for (long unsigned int i = 0; i < input_string.length(); ++i) {
 		if ('.' == input_string[i]) {
 			if (i - 1 >= 0 && i + 2 < input_string.length()) {
 				if ('.' == input_string[i + 1] && isdigit(input_string[i - 1]) &&
@@ -100,7 +100,7 @@ void DecimalSeparated(std::string& input_string) {
 
 bool CheckDecimal(const std::string& input_string){
 	bool error = false;
-	for (int i = 0; i < input_string.length(); ++i) {
+	for (long unsigned int i = 0; i < input_string.length(); ++i) {
 		if (1 == input_string.length() && '.' == input_string[0]) { // Checks if string is a lone '.'.
 			error = true;
 			break;
@@ -119,7 +119,7 @@ bool CheckDecimal(const std::string& input_string){
 			}
 		}
 		if ('.' == input_string[i]) {
-			for (int j = i + 1; j < input_string.length(); ++j) {
+			for (long unsigned int j = i + 1; j < input_string.length(); ++j) {
 				if ('(' == input_string[j] || ')' == input_string[j] ||
 						'^' == input_string[j] || '*' == input_string[j] ||
 						'/' == input_string[j] || '+' == input_string[j] ||
@@ -145,7 +145,7 @@ bool CheckEmpty(const std::string& input_string) {
 
 bool CheckChar(const std::string& input_string) {
 	bool error = false;
-	for (int i = 0; i < input_string.length(); ++i) {
+	for (long unsigned int i = 0; i < input_string.length(); ++i) {
 		if (!isdigit( input_string[i]) && // If an index is !digit, !operator, and !newline, then an invalid character is present.
 				input_string[i] != '(' && input_string[i] != ')' &&
 				input_string[i] != '^' && input_string[i] != '*' &&
@@ -161,7 +161,7 @@ bool CheckChar(const std::string& input_string) {
 
 bool CheckOperator(const std::string& input_string) {
 	bool error = false;
-	for (int i = 0; i < input_string.length(); ++i) {
+	for (long unsigned int i = 0; i < input_string.length(); ++i) {
 		if (0 < i) {
 			if (('^' == input_string[i] || '*' == input_string[i] ||
 					'/' == input_string[i] || '+' == input_string[i] ||
@@ -188,7 +188,7 @@ bool CheckOperator(const std::string& input_string) {
 
 bool CheckDoubleOp(const std::string& input_string) {
 	bool error = false;
-	for (int i = 0; i < input_string.length(); ++i) {
+	for (long unsigned int i = 0; i < input_string.length(); ++i) {
 		if (i + 1 < input_string.length()) { // Prevents out of bounds index for final iteration.
 			if (input_string[i] == input_string [i + 1] && // If double occurrence of operator exists.
 				(input_string[i] == '^' || input_string[i] == '*' ||
@@ -211,11 +211,11 @@ bool CheckParen(const std::string& input_string) {
 	std::string local_copy = input_string;
 	int left_paren = 0;
 	int right_paren = 0;
-	for (int i = 0; i < local_copy.length(); ++i) {
+	for (long unsigned int i = 0; i < local_copy.length(); ++i) {
 		if ('(' == local_copy[i]) {
 			++left_paren; // Count the number of left parenthesises.
 			error = true; // Assume there is no closing (right) parenthesis.
-			for (int j = i + 1; j < local_copy.length(); ++j) {
+			for (long unsigned int j = i + 1; j < local_copy.length(); ++j) {
 				if (')' == local_copy[j]) {
 					local_copy[j] = '~'; // Placeholder to prevent a single ')' occurrence from being counted in future iterations of loop.
 					error = false;
@@ -224,7 +224,7 @@ bool CheckParen(const std::string& input_string) {
 			}
 		}
 	}
-	for (int i = 0; i < local_copy.length(); ++i) { // Replace all placeholder '~' with ')'.
+	for (long unsigned int i = 0; i < local_copy.length(); ++i) { // Replace all placeholder '~' with ')'.
 		if ('~' == local_copy[i]) {
 			local_copy[i] = ')';
 		}
@@ -240,7 +240,7 @@ bool CheckParen(const std::string& input_string) {
 
 bool CheckInsideParen(const std::string& input_string) {
 	bool error = false;
-	for (int i = 0; i < input_string.length(); ++i) {
+	for (long unsigned int i = 0; i < input_string.length(); ++i) {
 		if (i < input_string.length() - 1) { // Prevents out of bounds indexing.
 			if ('(' == input_string[i] && ('^' == input_string[i + 1] || // Checks that left parenthesises do not have invalid internally adjacent operator.
 					'*' == input_string[i + 1] || '/' == input_string[i + 1] ||
@@ -264,7 +264,7 @@ bool CheckInsideParen(const std::string& input_string) {
 
 bool CheckStartEnd(const std::string& input_string) {
 	bool error = false;
-	for (int i = 0; i < input_string.length(); ++i) {
+	for (long unsigned int i = 0; i < input_string.length(); ++i) {
 				if ('^' == input_string[0] || '*' == input_string[0] || // Checks if invalid operator is present at start of string.
 				'/' == input_string[0] || '+' == input_string[0] ||
 				')' == input_string[0]) {
@@ -318,13 +318,13 @@ std::cout << "Made it to CheckStartEnd." << std::endl;
 
 double Calculate(const std::string&) {
 	//calcuates expression and returns result
-	double result;
+	double result = 0;
 	return result;
 }
 
 void MakeEquation(std::string& input_string, const double& result) {
 	std::string result_string = std::to_string(result);
-	for (int i = result_string.length() - 1; i > 0; --i) { // Removes trailing zeroes after decimal point inside string.
+	for (long unsigned int i = result_string.length() - 1; i > 0; --i) { // Removes trailing zeroes after decimal point inside string.
 		if ('0' == result_string[i]) {
 			result_string.erase(i, i);
 		} else if ('.' == result_string[i]) {
@@ -332,7 +332,7 @@ void MakeEquation(std::string& input_string, const double& result) {
 			break;
 		} else break;
 	}
-	for (int i = 0; i < input_string.length(); ++i) { // Inserts " " before and after specified operators.
+	for (long unsigned int i = 0; i < input_string.length(); ++i) { // Inserts " " before and after specified operators.
 		if('*' == input_string[i] || '/' == input_string[i] ||
  				'+' == input_string[i] || '-' == input_string[i]) {
 			input_string.insert(i, " ");
