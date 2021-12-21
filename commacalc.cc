@@ -189,9 +189,14 @@ bool CheckDoubleOp(std::string input_string) {
 	bool error = false;
 	for (int i = 0; i < input_string.length(); ++i) {
 		if (i + 1 < input_string.length()) { // Prevents out of bounds index for final iteration.
-			if ( input_string[i] == input_string [i + 1] && // If double occurrence of operator exists.
-				( input_string[i] == '^' || input_string[i] == '*' ||
+			if (input_string[i] == input_string [i + 1] && // If double occurrence of operator exists.
+				(input_string[i] == '^' || input_string[i] == '*' ||
 				input_string[i] == '/' || input_string[i] == '+')) {
+				error = true;
+				break;
+			}
+			if ('-' == input_string[i - 1] && '-' == input_string[i]
+					&& '-' == input_string[i + 1]) {
 				error = true;
 				break;
 			}
