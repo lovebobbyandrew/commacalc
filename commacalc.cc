@@ -299,49 +299,48 @@ bool CheckExpression(const std::string& input_string) {
 	bool error = false;
 	bool loop = true;
 	while (loop) {
-std::cout << "Made it to CheckEmpty." << std::endl; // REMOVE ALL COUT STATEMENTS UPON FINISHING ERROR CHECKING FUNCTIONS.
 		error = CheckEmpty(input_string);
 		if (error == true) break;
-std::cout << "Made it to CheckChar." << std::endl;
 		error = CheckChar(input_string);
 		if (error == true) break;
-std::cout << "Made it to CheckDecimal." << std::endl;
 		error = CheckDecimal(input_string);
 		if (error == true) break;
-std::cout << "Made it to CheckOperator." << std::endl;
 		error = CheckOperator(input_string);
 		if (error == true) break;
-std::cout << "Made it to CheckDoubleOp." << std::endl;
 		error = CheckDoubleOp(input_string);
 		if (error == true) break;
-std::cout << "Made it to CheckParen." << std::endl;
 		error = CheckParen(input_string);
 		if (error == true) break;
-std::cout << "Made it to CheckInsideParen." << std::endl;
 		error = CheckInsideParen(input_string);
 		if (error == true) break;
-std::cout << "Made it to CheckStartEnd." << std::endl;
 		error = CheckStartEnd(input_string);
 		loop = false;
 	}
 	return error;
 }
 
-void FindOperands(const std::string& input_string, const unsigned int operator_index, double& left_operand, double& right_operand) {
+void FindOperands(const std::string& input_string,
+									const unsigned int operator_index, double& left_operand,
+									double& right_operand, unsigned int& left_operand_start,
+									unsigned int& right_operand_end) {
   std::string left_operand_string;
   std::string right_operand_string;
   for (long unsigned int i = operator_index - 1; i >= 0; --i) {
     if (!isdigit(input_string[i]) && '.' != input_string[i]) {
       break;
     } else {
+			std::cout << "ith index is " << input_string[i] << std::endl;
+			left_operand_start = i;
       left_operand_string.insert(0, 1, input_string[i]);
     }
   }
   left_operand = stod(left_operand_string);
+	std::cout << left_operand << std::endl;
   for (long unsigned int i = operator_index + 1; i < input_string.length(); ++i) {
 		if (!isdigit(input_string[i]) && '.' != input_string[i]) {
     	break;
     }
+		right_operand_end = i;
   	right_operand_string = right_operand_string + input_string[i];
 	}
 	right_operand = stod(right_operand_string);     
@@ -351,36 +350,65 @@ void FindOperands(const std::string& input_string, const unsigned int operator_i
 void Exponentiation(std::string& input_string, unsigned int operator_index) {
 	double base;
 	double exponent;
-	FindOperands(input_string, operator_index, base, exponent);
-	std::cout << "base is " << base << " and exponent is " << exponent << std::endl;
-	// TODO: YOU MUST REPLACE THE PORTION OF input_string THAT CAN BE REPRESENTED BY THE RESULT OF pow(base, exponent) WITH THE STRING VERSION OF RESULT.
-	// EXAMPLE: "3^2+4" WOULD BECOME "9+4" AFTER CALLING THIS FUNCTION
+	unsigned int base_start;
+	unsigned int exponent_end;
+	FindOperands(input_string, operator_index, base, exponent, base_start, exponent_end);
+	input_string.replace(base_start, exponent_end - base_start, std::to_string(pow(base, exponent)));
 }
 
 void Multiplication(std::string& input_string, unsigned int operator_index) {
-
+	double multiplicand;
+	double multiplier;
+	unsigned int multiplicand_start;
+	unsigned int multiplier_end;
+	FindOperands(input_string, operator_index, multiplicand, multiplier, multiplicand_start, multiplier_end);
+	input_string.replace(multiplicand_start, multiplier_end - multiplicand_start, std::to_string(multiplicand * multiplier));
 }
 
 void Division(std::string& input_string, unsigned int operator_index) {
-
+	double dividend;
+	double divisor;
+	unsigned int dividend_start;
+	unsigned int divisor_end;
+	FindOperands(input_string, operator_index, dividend, divisor, dividend_start, divisor_end);
+	input_string.replace(dividend_start, divisor_end - dividend_start, std::to_string(dividend / divisor));
 }
 
 void Addition(std::string& input_string, unsigned int operator_index) {
-
+	double addend;
+	double augend;
+	unsigned int addend_start;
+	unsigned int augend_end;
+	FindOperands(input_string, operator_index, addend, augend, addend_start, augend_end);
+	std::cout << "input additon is " << input_string << std::endl;
+	std::cout << "operator_index is " << operator_index << std::endl;
+	std::cout << "start is " << addend_start << " and end is " << augend_end << std::endl;
+	input_string.replace(addend_start, augend_end - addend_start, std::to_string(addend + augend));
+	std::cout << "input addition 2 is " << input_string << std::endl;
 }
 
 void Subtraction(std::string& input_string, unsigned int operator_index) {
-
+	double minuend;
+	double subtrahend;
+	unsigned int minuend_start;
+	unsigned int subtrahend_end;
+	FindOperands(input_string, operator_index, minuend, subtrahend, minuend_start, subtrahend_end);
+	std::cout << "made it" << std::endl;
+	input_string.replace(minuend_start, subtrahend_end - minuend_start, std::to_string(minuend - subtrahend));
+	std::cout << "made it 2" << std::endl;
+	std::cout << input_string << std::endl;
+	std::cout << "made it 3" << std::endl;
+	std::cout << stod(input_string) << std::endl;
 }
 
-double Calculate(std::string& input_string) { // Ignoring parenthesis support for now.
+double Calculate(std::string& input_string) { // NEED TO ADD PARENTHESIS SUPPORT AND DOES NOT FOLLOW ORDER OF OPERATIONS FOR EX: 32-3+7 YIELDS 23
 	unsigned short highest_operator;
 	unsigned int operator_index = 0;
 	bool operators_remain = true;
 	do {
 		highest_operator = 0;
 		for (long unsigned int i = 0; i < input_string.length(); ++i) { // Find what the operator of highest precendence is and its index within input_string.
-			if (!isdigit(input_string[i])) {
+			if (!isdigit(input_string[i]) && '.' != input_string[i]) {
 				switch(input_string[i]) {
 					case '^':
 						highest_operator = 5;
@@ -405,7 +433,7 @@ double Calculate(std::string& input_string) { // Ignoring parenthesis support fo
 						}
 						break;
 					case '-':
-						if (highest_operator < 1) {
+						if (highest_operator < 1 && 0 != i) {
 							highest_operator = 1;
 							operator_index = i;
 						}
@@ -434,9 +462,7 @@ double Calculate(std::string& input_string) { // Ignoring parenthesis support fo
 			operators_remain = false;
 		}
 	} while (operators_remain);
-	std::cout << "highest_operator is " << highest_operator << " and operator_index is " << operator_index << std::endl;
-	double dummy = 0;
-	return dummy; // REPLACE dummy WITH stod(input_string) AS dummy IS A PLACEHOLDER TO PREVENT HANGUPS UNTIL I HAVE THIS FUNC WORKING.
+	return stod(input_string);
 }
 
 void MakeEquation(std::string& input_string, const double& result) {
@@ -470,80 +496,5 @@ void StoreEquation(std::deque<std::string>& history_deque, const std::string& eq
 	}
 }
 
-//FACTORIAL SUPPORT?
-
-/*void Parenthesis(std::string& input_string, const long unsigned int start_index) { // Start at index [i + 1], with index [i] being the index containing '('.
-	std::string left_operand = "";
-	std::string right_operand = "";
-	unsigned int operator_type = 0;
-	long unsigned int end_index;
-	long unsigned int left_operand_start = start_index;
-	long unsigned int left_operand_end = 0;
-	long unsigned int right_operand_start = 0;
-	long unsigned int rignt_operand_end = 0;
-	bool operator_found = false;
-	bool next_operator = false;
-	for (long unsigned int i = 0; i < input_string.length(); ++i) {
-		if (true == next_operator) {
-			end_index = i - 2;
-			break;
-		}
-		if (false == operator_found && isdigit(input_string[i])){
-			left_operand = left_operand + input_string[i];
-		} else if (true == operator_found && isdigit(input_string[i])) {
-			right_operand == right_operand + input_string[i];
-		}
-		switch (input_string[i]) {
-			case '(':
-				if (true == operator_found) {
-					next_operator = true;
-					break;
-				}
-				operator_found = true;
-				Parenthesis(input_string, i + 1);
-				break;
-			case '^':
-				if (true == operator_found) {
-					next_operator = true;
-					break;
-				}
-				operator_found = true;
-				operator_type = 1;
-				break;
-			case '*':
-				if (true == operator_found) {
-					next_operator = true;
-					break;
-				}
-				operator_found = true;
-				operator_type = 2;
-				break;
-			case '/':
-				if (true == operator_found) {
-					next_operator = true;
-					break;
-				}
-				operator_found = true;
-				operator_type = 3;
-				break;
-			case '+':
-				if (true == operator_found) {
-					next_operator = true;
-					break;
-				}
-				operator_found = true;
-				operator_type = 4;
-				break;
-			case '-':
-				if (true == operator_found) {
-					next_operator = true;
-					break;
-				}
-				operator_found = true;
-				operator_type = 5;
-				break;
-		}
-				
-	}
-} */
-} //End of namespace commacalc.
+// ADD FACTORIAL SUPPORT?
+} //End of namespace "commacalc".
