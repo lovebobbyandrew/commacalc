@@ -174,7 +174,7 @@ bool CheckOperator(const std::string& input_string) {
 	bool error = false;
 	for (long unsigned int i = 0; i < input_string.length(); ++i) {
 		if (0 < i) {
-			if (('^' == input_string[i] || '*' == input_string[i] ||
+			if (('^' == input_string[i] || '*' == input_string[i] || // Checks if 2 operators (other than '-') are adjacent.
 					'/' == input_string[i] || '+' == input_string[i] ||
 					'-' == input_string[i]) && ('^' == input_string[i - 1] ||
 					'*' == input_string[i - 1] || '/' == input_string[i - 1] ||
@@ -327,9 +327,116 @@ std::cout << "Made it to CheckStartEnd." << std::endl;
 	return error;
 }
 
-double Calculate(const std::string&) {
-	double result = 0;
-	return result;
+void FindOperands(const std::string& input_string, const unsigned int operator_index, double& left_operand, double& right_operand) {
+  std::string left_operand_string;
+  std::string right_operand_string;
+  for (long unsigned int i = operator_index - 1; i >= 0; --i) {
+    if (!isdigit(input_string[i]) && '.' != input_string[i]) {
+      break;
+    } else {
+      left_operand_string.insert(0, 1, input_string[i]);
+    }
+  }
+  left_operand = stod(left_operand_string);
+  for (long unsigned int i = operator_index + 1; i < input_string.length(); ++i) {
+		if (!isdigit(input_string[i]) && '.' != input_string[i]) {
+    	break;
+    }
+  	right_operand_string = right_operand_string + input_string[i];
+	}
+	right_operand = stod(right_operand_string);     
+}
+
+
+void Exponentiation(std::string& input_string, unsigned int operator_index) {
+	double base;
+	double exponent;
+	FindOperands(input_string, operator_index, base, exponent);
+	std::cout << "base is " << base << " and exponent is " << exponent << std::endl;
+	// TODO: YOU MUST REPLACE THE PORTION OF input_string THAT CAN BE REPRESENTED BY THE RESULT OF pow(base, exponent) WITH THE STRING VERSION OF RESULT.
+	// EXAMPLE: "3^2+4" WOULD BECOME "9+4" AFTER CALLING THIS FUNCTION
+}
+
+void Multiplication(std::string& input_string, unsigned int operator_index) {
+
+}
+
+void Division(std::string& input_string, unsigned int operator_index) {
+
+}
+
+void Addition(std::string& input_string, unsigned int operator_index) {
+
+}
+
+void Subtraction(std::string& input_string, unsigned int operator_index) {
+
+}
+
+double Calculate(std::string& input_string) { // Ignoring parenthesis support for now.
+	unsigned short highest_operator;
+	unsigned int operator_index = 0;
+	bool operators_remain = true;
+	do {
+		highest_operator = 0;
+		for (long unsigned int i = 0; i < input_string.length(); ++i) { // Find what the operator of highest precendence is and its index within input_string.
+			if (!isdigit(input_string[i])) {
+				switch(input_string[i]) {
+					case '^':
+						highest_operator = 5;
+						operator_index = i;
+						break;
+					case '*':
+						if (highest_operator < 4) {
+							highest_operator = 4;
+							operator_index = i;
+						}
+						break;
+					case '/':
+						if (highest_operator < 3) {
+							highest_operator = 3;
+							operator_index = i;
+						}
+						break;
+					case '+':
+						if (highest_operator < 2) {
+							highest_operator = 2;
+							operator_index = i;
+						}
+						break;
+					case '-':
+						if (highest_operator < 1) {
+							highest_operator = 1;
+							operator_index = i;
+						}
+						break;
+				}
+			}
+		}
+		switch (highest_operator) { // Using what the highest operator is and its location, perform an operation and store the data back into input_string for next iteration.
+			case 1:
+				Subtraction(input_string, operator_index);
+				break;
+			case 2:
+				Addition(input_string, operator_index);
+				break;
+			case 3:
+				Division(input_string, operator_index);
+				break;
+			case 4:
+				Multiplication(input_string, operator_index);
+				break;
+			case 5:
+				Exponentiation(input_string, operator_index);
+				break;
+		}
+		if (0 == highest_operator) {
+			operators_remain = false;
+		}
+	} while (operators_remain);
+	std::cout << "highest_operator is " << highest_operator << " and operator_index is " << operator_index << std::endl;
+	double dummy = 0;
+	return dummy; // REPLACE dummy WITH stod(input_string) AS dummy IS A PLACEHOLDER TO PREVENT HANGUPS UNTIL I HAVE THIS FUNC WORKING.
 }
 
 void MakeEquation(std::string& input_string, const double& result) {
@@ -438,25 +545,5 @@ void StoreEquation(std::deque<std::string>& history_deque, const std::string& eq
 		}
 				
 	}
-}*/
-
-void Exponentiation(std::string& input_string) {
-
-}
-
-void Multiplication(std::string& input_string) {
-
-}
-
-void Division(std::string& input_string) {
-
-}
-
-void Addition(std::string& input_string) {
-
-}
-
-void Subtraction(std::string& input_string) {
-
-}
+} */
 } //End of namespace commacalc.

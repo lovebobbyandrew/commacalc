@@ -11,6 +11,7 @@ int main() {
 	bool loop = true;
 	double result;
 	std::string input_string;
+	std::string formatted_string;
 	std::deque<std::string> history_deque;
 	do {
 		commacalc::PrintMenu();
@@ -32,14 +33,16 @@ int main() {
 					// CHECK VALIDITY OF INPUT STRING EXPRESSION
 					if(!commacalc::CheckExpression(input_string)) { // If CheckExpr returns false, there is no expression error.
 						std::cout << "Valid expression." << std::endl;
+						formatted_string = input_string;
 						// PARSE VALUES AND OPERATIONS FROM STRING
 						// EVALUATE EXPRESSION
 						// OUTPUT RESULT
 						result = commacalc::Calculate(input_string);
+						std::cout << "result is " << result << std::endl;
 						// STORE EXPRESSION AND RESULT IN HISTORY
-						commacalc::MakeEquation(input_string, result);
-						std::cout << "equation_string is \"" << input_string << "\"." << std::endl;
-						commacalc::StoreEquation(history_deque, input_string);
+						commacalc::MakeEquation(formatted_string, result);
+						std::cout << "formatted_string is \"" << formatted_string << "\"." << std::endl;
+						commacalc::StoreEquation(history_deque, formatted_string);
 					}
 					else std::cout << "Invalid expression." << std::endl;
 					break;
