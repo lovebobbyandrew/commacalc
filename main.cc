@@ -27,6 +27,7 @@ int main() {
 					commacalc::ReplaceSpace(input_string);
 					commacalc::RemoveSpace(input_string);
 					commacalc::DecimalSeparated(input_string);
+					commacalc::KeepChangeChange(input_string);
 					std::cout << "input_string after modification is \"" << input_string << "\"." << std::endl;
 					// CHECK VALIDITY OF INPUT STRING EXPRESSION
 					if(!commacalc::CheckExpression(input_string)) { // If CheckExpr returns false, there is no expression error.

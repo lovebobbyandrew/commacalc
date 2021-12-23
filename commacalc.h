@@ -23,6 +23,8 @@ void RemoveSpace(std::string&); // Removes all whitespace from input string.
 
 void DecimalSeparated(std::string&); // Inserts a '*' when 2 numbers are separated by 2 '.'.
 
+void KeepChangeChange(std::string&); // Replaces double '-' directly before a digit with a single '+'.
+
 bool CheckExpression(const std::string&); // Checks that string is valid math expression using other functions.
 
 bool CheckChar(const std::string&); // Checks that string contains no invalid characters.
@@ -49,15 +51,17 @@ void MakeEquation(std::string&, const double&); // Uses whitespace-less expressi
 
 void StoreEquation(std::deque<std::string>&, const std::string&); // Stores equation string into history dequeue.
 
-double Exponentiaion(const double, const double); // Performs exponentiation.
+void Parenthesis(std::string&, const long unsigned int); // Evaluates parenthesis.
 
-double Multplication(const double, const double); // Performs multiplication.
+void Exponentiaion(std::string&); // Performs exponentiation.
 
-double Division(const double, const double); // Performs division.
+void Multplication(std::string&); // Performs multiplication.
 
-double Addition(const double, const double); // Performs addition.
+void Division(std::string&); // Performs division.
 
-double Subtraction(const double, const double); // Performs subtraction.
+void Addition(std::string&); // Performs addition.
+
+void Subtraction(std::string&); // Performs subtraction.
 
 //CONSIDER ADDING SUPPORT FOR FACTORIALS
 } // End of namespace "commacalc".
